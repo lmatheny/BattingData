@@ -10,7 +10,7 @@ To get started with the visualizer, follow these steps:
 1. Clone the repository to your local machine using the following command:
 
    ```bash
-   git clone https://github.com/your-username/mlb-past-at-bat-visualizer.git
+   git clone https://github.com/lmatheny/BattingData.git
    ```
 
    Replace `your-username` with your actual GitHub username.
