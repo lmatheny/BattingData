@@ -10,7 +10,7 @@ To run the MLB Past At-Bat Visualizer, follow these steps:
 
 2. **Clone the Repository**:
    - Open Visual Studio Code.
-   - Click on the "Source Control" icon (looks like a square with a branch).
+   - Click on the "Source Control" icon.
    - Click "Clone Repository."
    - Enter the repository URL, e.g., `https://github.com/your-username/mlb-past-at-bat-visualizer`, and choose a local directory.
    - Click "Clone."
