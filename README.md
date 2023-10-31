@@ -40,5 +40,10 @@ To run the MLB Past At-Bat Visualizer, follow these steps:
 
 This will launch the MLB Past At-Bat Visualizer in your default web browser.
 
+## Future Works
+To show where I would have taken the project if I had more time, I created a space where users could select a pitcher as well. The vision here was to only display users the at-bats between the selected batters and pitchers. 
+
+
+
 
 
