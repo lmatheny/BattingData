@@ -31,7 +31,4 @@ That's it! You should now be able to use the MLB Past At-Bat Visualizer in your 
 
 If you encounter any issues or have feedback to share, please feel free to [create an issue](https://github.com/your-username/mlb-past-at-bat-visualizer/issues) on this GitHub repository. We'd love to hear from you and improve the application.
 
-Happy visualizing!
-```
 
-You can copy and paste this code into your project's README file on GitHub.
