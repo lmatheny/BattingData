@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MLB Past At-Bat Visualizer</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <h1 class="custom-title" id="webAppTitle">MLB Past At-Bat Visualizer</h1>
+    <div class="field-container">
+        <img src="field.png" alt="Field Image" class="field-image">
+        <canvas id="fieldCanvas" class="field-canvas" width="1000" height="400"></canvas>
+    </div>
+    <div class="text-container">
+        <div class="custom-first">
+            <label for="batterSelect" class="custom-label-batter" style="font-family: Arial;">BATTER</label>
+
+            <div class="dropdown">
+                <div id="myDropdown" class="dropdown-content">
+                    <div id="batterSearchContainer">
+                        <input class="results" type="text" placeholder="Search.." id="myInput"
+                            oninput="filterBatters()">
+                    </div>
+                    <div id="batterSelection" style="display: none;">
+                        <div id="selectedBatter">
+                            <span id="selectedBatterName"></span>
+                            <a href="#" class="sbX" id="clearBatterSelection"
+                                onclick="clearBatterSelection()"><img src="xx.png" alt="Clear Selection"></a>
+                        </div>
+                    </div>
+                    <div id="batterListContainer" class="scrollable-container">
+                        <div id="batterList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-second">
+            <h2 class="custom-subheading">At-Bat Summary</h2>
+            <div style="display: flex; justify-content: center;">
+                <p class="custom-pn"><strong>Pitcher Name:</strong> <span id="thePitcherName"></span></p>
+            
+            </div>
+            <div class="at-bat-row">
+                <div class="at-bat-column1">
+                    <p><strong>Game Date:</strong> <span id="gameDate"></span></p>
+                    <p><strong>Launch Angle:</strong> <span id="launchAngle"></span></p>
+                    <p><strong>Exit Speed:</strong> <span id="exitSpeed"></span></p>
+                </div>
+                <div class="at-bat-column2">
+                    <p><strong>Exit Direction:</strong> <span id="exitDirection"></span></p>
+                    <p><strong>Hit Distance:</strong> <span id="hitDistance"></span></p>
+                    <p><strong>Hang Time:</strong> <span id="hangTime"></span></p>
+                </div>
+                <div class="at-bat-column3">
+                    <p><strong>Hit Spin Rate:</strong> <span id="hitSpinRate"></span></p>
+                    <p><strong>Play Outcome:</strong> <span id="playOutcome"></span></p>
+                    <a id="videoLink" href="#" target="_blank" style="color: white; font-size: 16px;">Watch Video</a>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="custom-third" style="pointer-events: none; opacity: 0.5; position: relative;">
+            <div style="position: absolute; top: 20; left: 0; width: 100%; text-align: center;">
+                <p style="color: black; font-size: 40px; margin-top: 25%; font-family: Arial;"><b>FUTURE WORKS</b></p>
+
+               
+            </div>
+            <label for="pitcherSelect" class="custom-label-pitcher"  style="font-family: Arial;">PITCHER</label>
+            <div class="dropdown">
+                <div id="pitcherDropdown" class="dropdown-content">
+                    <input class="results" type="text" placeholder="Search Pitchers.." id="pitcherInput" oninput="filterPitchers()" disabled>
+                </div>
+                <div id="pitcherSelection" style="display: none;">
+                    <div id="selectedPitcher">
+                        <span id="selectedPitcherName"></span>
+                        <a href="#" class="sbX-pitcher" id="clearPitcherSelection" onclick="clearPitcherSelection()"><img src="xx.png" alt="Clear Selection"></a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Create a canvas context
+
+        function drawHitPathsForBatter(batterName, hits) {
+            const canvas = document.getElementById('fieldCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const summaryElements = {
+                thePitcherName: document.getElementById('thePitcherName'),
+                gameDate: document.getElementById('gameDate'),
+                launchAngle: document.getElementById('launchAngle'),
+                exitSpeed: document.getElementById('exitSpeed'),
+                exitDirection: document.getElementById('exitDirection'),
+                hitDistance: document.getElementById('hitDistance'),
+                hangTime: document.getElementById('hangTime'),
+                hitSpinRate: document.getElementById('hitSpinRate'),
+                playOutcome: document.getElementById('playOutcome'),
+                videoLink: document.getElementById('videoLink'),
+            };
+
+            const startX = 500; // Starting X-coordinate
+            const startY = 350; // Starting Y-coordinate
+
+            hits.forEach(hit => {
+                const exitAngle = hit.EXIT_DIRECTION; // Use exit angle from the JSON
+                const hitDistance = hit.HIT_DISTANCE;
+
+                // Convert angle to radians and reverse the direction
+                const exitAngleRad = (90 - exitAngle) * (Math.PI / 180);
+
+                const x0 = startX;
+                const y0 = startY;
+
+                const x1 = x0 + Math.cos(exitAngleRad) * hitDistance;
+                const y1 = y0 - Math.sin(exitAngleRad) * hitDistance; // Reverse the direction
+
+                // Set line style and draw the path
+                ctx.strokeStyle = 'red'; // Set the path color
+                ctx.lineWidth = 2; // Set the path width
+                ctx.beginPath();
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(x1, y1);
+                ctx.stroke();
+
+                // Add a click event listener to each line
+                canvas.addEventListener('click', (event) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const clickX = event.clientX - rect.left;
+                    const clickY = event.clientY - rect.top;
+
+                    if (
+                        clickX >= Math.min(x0, x1) && clickX <= Math.max(x0, x1) &&
+                        clickY >= Math.min(y0, y1) && clickY <= Math.max(y0, y1)
+                    ) {
+                        // Update summary elements with the hit data
+                        
+                        summaryElements.thePitcherName.textContent = hit.PITCHER;
+                        summaryElements.gameDate.textContent = hit.GAME_DATE;
+                        summaryElements.launchAngle.textContent = hit.LAUNCH_ANGLE;
+                        summaryElements.exitSpeed.textContent = hit.EXIT_SPEED;
+                        summaryElements.exitDirection.textContent = hit.EXIT_DIRECTION;
+                        summaryElements.hitDistance.textContent = hit.HIT_DISTANCE;
+                        summaryElements.hangTime.textContent = hit.HANG_TIME;
+                        summaryElements.hitSpinRate.textContent = hit.HIT_SPIN_RATE;
+                        summaryElements.playOutcome.textContent = hit.PLAY_OUTCOME;
+                        summaryElements.videoLink.href = hit.VIDEO_LINK;
+                    }
+                });
+            });
+        }
+
+
+
+
+
+
+
+
+
+        function selectBatter(batterName) {
+            const batterSearchContainer = document.getElementById('batterSearchContainer');
+            const batterSelection = document.getElementById('batterSelection');
+            const selectedBatterName = document.getElementById('selectedBatterName');
+            const myInput = document.getElementById('myInput');
+            const batterListContainer = document.getElementById('batterListContainer');
+
+            batterSearchContainer.style.display = 'none';
+            batterSelection.style.display = 'block';
+            selectedBatterName.textContent = batterName;
+            myInput.value = '';
+            batterListContainer.style.display = 'none'; // Hide the batter list
+
+            // Get the hit data for the selected batter using a function (e.g., getHitDataForBatter)
+            // This function should return an array of hits for the selected batter
+            const hitsData = getHitDataForBatter(batterName);
+            getHitDataForBatter(batterName)
+                .then(hitsData => {
+                    drawHitPathsForBatter(batterName, hitsData);
+                })
+                .catch(error => {
+                    console.error('Error getting hit data for the selected batter:', error);
+                });
+
+            // Call the function to draw hit paths for the selected batter
+            drawHitPathsForBatter(batterName, hitsData);
+        }
+
+
+
+
+
+
+
+
+        // Function to load and display unique batters from BattedBallData.json
+        function loadBatters() {
+            fetch('BattedBallData.json')
+                .then(response => response.json())
+                .then(data => {
+                    const dropdownContent = document.getElementById('batterList');
+                    const uniqueBatters = Array.from(new Set(data.Data.map(atBat => atBat.BATTER)));
+                    for (let i = 0; i < uniqueBatters.length; i++) {
+                        const batterName = uniqueBatters[i];
+                        const a = document.createElement('a');
+
+                        a.textContent = batterName;
+                        a.href = '#';
+                        a.onclick = () => selectBatter(batterName);
+                        dropdownContent.appendChild(a);
+                    }
+                })
+                .catch(error => console.error('Error loading JSON:', error));
+        }
+
+
+        // Function to clear batter selection
+        function clearBatterSelection() {
+            const batterSearchContainer = document.getElementById('batterSearchContainer');
+            const batterSelection = document.getElementById('batterSelection');
+            const selectedBatterName = document.getElementById('selectedBatterName');
+            const myInput = document.getElementById('myInput');
+            const batterListContainer = document.getElementById('batterListContainer');
+
+            batterSearchContainer.style.display = 'block';
+            batterSelection.style.display = 'none';
+            selectedBatterName.textContent = '';
+            myInput.value = '';
+            batterListContainer.style.display = 'block'; // Show the batter list
+        }
+
+        // Function to handle pitcher selection
+        function selectPitcher(pitcherName) {
+            const pitcherSearchContainer = document.getElementById('pitcherDropdown');
+            const pitcherSelection = document.getElementById('pitcherSelection');
+            const selectedPitcherName = document.getElementById('selectedPitcherName');
+            const pitcherInput = document.getElementById('pitcherInput');
+
+            pitcherSearchContainer.style.display = 'none';
+            pitcherSelection.style.display = 'flex';
+            selectedPitcherName.textContent = pitcherName;
+            pitcherInput.value = '';
+
+            // Call the function to filter hits for both batter and pitcher
+            filterHitsForBatterAndPitcher(selectedBatterName.textContent, selectedPitcherName.textContent);
+        }
+        // Function to clear pitcher selection
+        function clearPitcherSelection() {
+            const pitcherSearchContainer = document.getElementById('pitcherDropdown');
+            const pitcherSelection = document.getElementById('pitcherSelection');
+            const selectedPitcherName = document.getElementById('selectedPitcherName');
+            const pitcherInput = document.getElementById('pitcherInput');
+
+            pitcherSearchContainer.style.display = 'block';
+            pitcherSelection.style.display = 'none';
+            selectedPitcherName.textContent = '';
+            pitcherInput.value = '';
+            // Call function to log matches
+            logMatches(selectedBatterName.textContent, selectedPitcherName.textContent);
+        }
+
+
+
+        window.addEventListener('load', loadBatters);
+
+        // Copy this JavaScript code for pitchers
+        // Function to load and display unique pitchers from BattedBallData.json
+        function loadPitchers() {
+            fetch('BattedBallData.json')
+                .then(response => response.json())
+                .then(data => {
+                    const pitcherDropdownContent = document.getElementById('pitcherDropdown');
+                    const uniquePitchers = Array.from(new Set(data.Data.map(item => item.PITCHER)));
+                    for (let i = 0; i < uniquePitchers.length; i++) {
+                        const pitcherName = uniquePitchers[i];
+                        const a = document.createElement('a');
+
+                        a.textContent = pitcherName;
+                        a.href = '#';
+                        a.onclick = () => selectPitcher(pitcherName);
+                        pitcherDropdownContent.appendChild(a);
+                    }
+                })
+                .catch(error => console.error('Error loading JSON:', error));
+        }
+
+        function filterHitsByPitcher(pitcherName, hits) {
+            return hits.filter(hit => hit.PITCHER === pitcherName);
+        }
+
+
+        // Function to clear pitcher selection
+        function clearPitcherSelection() {
+            const pitcherSearchContainer = document.getElementById('pitcherDropdown');
+            const pitcherSelection = document.getElementById('pitcherSelection');
+            const selectedPitcherName = document.getElementById('selectedPitcherName');
+            const pitcherInput = document.getElementById('pitcherInput');
+
+            pitcherSearchContainer.style.display = 'block';
+            pitcherSelection.style.display = 'none';
+            selectedPitcherName.textContent = ''; // Clear the selectedPitcherName
+            pitcherInput.value = '';
+            // Call function to log matches
+            logMatches(selectedBatterName.textContent, selectedPitcherName.textContent);
+        }
+
+        // Add an event listener to load pitchers when the page loads
+        window.addEventListener('load', loadPitchers);
+
+        function filterBatters() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
+
+
+function filterPitchers() {
+    var input, filter, div, a, i;
+    input = document.getElementById("pitcherInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("pitcherDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
+
+
+// Function to fetch and filter hit data for a specific batter
+async function getHitDataForBatter(batterName) {
+    try {
+        // Fetch the JSON file
+        const response = await fetch('BattedBallData.json');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Filter the hit data for the specified batter
+        const hitsForBatter = data.Data.filter(hit => hit.BATTER === batterName);
+
+        return hitsForBatter;
+    } catch (error) {
+        console.error('Error fetching JSON:', error);
+        return [];
+    }
+}
+
+
+async function getHitDataForPitcher(pitcherName) {
+    // Fetch the hits data (modify the URL as needed)
+    const response = await fetch('your_hits_data_url.json');
+    if (!response.ok) {
+        throw new Error('Failed to fetch hits data');
+    }
+
+    const hitsData = await response.json();
+
+    // Filter hits data for the selected pitcher
+    const filteredHits = hitsData.filter(hit => hit.PITCHER === pitcherName);
+
+    return filteredHits;
+}
+
+
+    </script>
+
+</body>
+
+</html>

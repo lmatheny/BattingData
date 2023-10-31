@@ -1,0 +1,267 @@
+/* index.css */
+
+body {
+    background-color: #000000;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.custom-title {
+    text-align: center;
+    font-size: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+img {
+    max-height: 600px;
+    width: 50%;
+    height: auto;
+    display: block;
+    margin: 0px auto;
+}
+
+.text-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0px;
+    width: 100%;
+}
+
+.custom-first {
+    width: 25%;
+    max-height: 20px;
+    padding-left: 2px;
+}
+
+.custom-third {
+    width: 25%;
+    padding-right: 20px;
+}
+
+.custom-heading {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* Add this CSS in your index.css file */
+.custom-label-batter {
+    font-size: 50px;
+    color: #0000FF;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-top: -20%;
+    margin-left: 0px; /* Add margin to the left */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-label-pitcher {
+    font-size: 50px;
+    color: #FF0000;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-top: -20%;
+    
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-second {
+    width: 47%;
+    border: 1px solid #ccc; /* Add a border style */
+    margin-top: 15px; /* Add padding inside the box */
+}
+
+.custom-subheading {
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 25px;
+    text-decoration: underline;
+}
+
+.custom-pn {
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 20px;
+
+}
+
+.at-bat-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.at-bat-column1 {
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.at-bat-column2 {
+    margin-left: 12.5%;
+    padding-right: 12.5%;
+}
+
+.at-bat-column3 {
+    padding-left: 20px;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+
+.dropdown {
+    width: 100%;
+    margin-top: 10;
+}
+
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #3e8e41;
+}
+
+
+#batterInput:focus {
+    outline: 3px solid #ddd;
+}
+
+
+.dropdown-content {
+  
+    
+    background-color: #f6f6f6;
+    min-width: 200px;
+    max-height: 300px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+.results {
+    width: 100%;
+    min-height: 30px;
+    padding: 5px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+
+
+/* Additional styles as needed */
+
+
+/* Add this CSS to your index.css file */
+#selectedBatter {
+    display: flex;
+    flex-direction: row; /* Display on the same line */
+    width: 100%;
+    
+
+    background-color: #d3d3d3;
+   
+   
+}
+
+
+
+#selectedBatterName {
+    margin-left: 15px;
+    margin-top: 3.5%;
+    margin-bottom: 3%;
+    min-width: 67.5%;
+    font-weight: bold; /* Make it bold */
+    font-size: large;
+   color: #000000; /* Slightly grey background */
+}
+
+
+#clearBatterSelection {
+
+    text-align: right;
+    display: inline; /* Add this line to make it inline */
+}
+
+.sbX {
+    min-width: 50px;
+    max-width: 90px;
+    max-height: 40px;
+}
+
+
+/* CSS styles for pitcher selection */
+#selectedPitcher {
+    display: flex;
+    flex-direction: row; /* Display on the same line */
+    width: 100%;
+
+    background-color: #d3d3d3;
+}
+
+#selectedPitcherName {
+    margin-left: 15px;
+    margin-top: 3.5%;
+    margin-bottom: 3%;
+    min-width: 67.5%;
+    font-weight: bold; /* Make it bold */
+    font-size: large;
+    color: #000000; /* Slightly grey background */
+}
+
+#clearPitcherSelection {
+    text-align: right;
+    display: inline; /* Add this line to make it inline */
+}
+
+
+.sbX-pitcher {
+    max-width: 55px; /* Adjust the width as needed */
+    max-height: 50px;
+    margin-top: 2.5%;
+    margin-left: 5%;
+    
+   
+}
+
+.field-container {
+    position: relative;
+    height: 400px;
+    width: 1000px; /* Set the max width of your field container */
+    margin: 0 auto; /* Center the container */
+}
+
+.field-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.field-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+
