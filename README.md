@@ -7,7 +7,12 @@
    - Search for a batter from all possible options of hitters
    - Click on one of the ball path simulations to see the stats of the at-bat
 
-## How to Run
+
+## How to Run (option 1 of 2)
+
+ If you prefer to view the web app directly on GitHub Pages, you can visit [MLB Past At-Bat Visualizer](https://lmatheny.github.io/BattingData/).
+
+## How to Run (option 2 of 2)
 
 To run the MLB Past At-Bat Visualizer, follow these steps:
 
@@ -34,4 +39,6 @@ To run the MLB Past At-Bat Visualizer, follow these steps:
    - Choose "Open with Live Server."
 
 This will launch the MLB Past At-Bat Visualizer in your default web browser.
+
+
 
